@@ -6,6 +6,7 @@ import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 
 import './App.css';
+import Logout from "./components/Logout";
 
 ReactDOM.render(
 	<BrowserRouter >
