@@ -9,8 +9,14 @@ from collections import OrderedDict
 from collections import defaultdict
 import datetime
 
+from utils import get_data_from_excel
+
+
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app, resources={
+    r"/api/*": {"origins": "*"},
+    r"/get_scores/*": {"origins": "http://localhost:3000"}
+})
 
 IT_course_dates = {
     "IDS":["2020-11-09", "2020-12-05"],
@@ -314,3 +320,16 @@ def get_presentation_scores():
         ppt_scores[row_data[1].lower()] = row_data_json
     
     return ppt_scores
+
+@app.route("/get_scores/<string:student_email>")
+def get_scores(student_email):
+    values = get_data_from_excel('scores')
+    headers = values[0]
+    json_str = None
+    for row in values[1:]:
+        if row[1] == student_email:
+            row_dict = dict(zip(headers, row))
+            json_str = json.dumps(row_dict, indent=4)
+    if json_str:
+        return json_str
+    return jsonify({'message': "Email Not found"})
