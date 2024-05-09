@@ -1,12 +1,8 @@
 import axios from "axios";
-import React, { useState, useEffect }  from "react";
 import Papa from 'papaparse';
-import { useHistory } from 'react-router-dom';
+import React from "react";
 import { GoogleLogin } from "react-google-login";
-import AdminDashboard from "./pages/AdminDashboard";
-import MentorDashboard from "./MentorDashboard";
-import StudentDashboard from "./pages/StudentDashboard";
-import LandingPage from "./LandingPage";
+import { useHistory } from 'react-router-dom';
 // refresh token
 import { refreshTokenSetup } from "../utils/refreshToken";
 
@@ -46,13 +42,14 @@ function Login(props) {
         }
       });
 
-      const csvFilePath = '/data.csv'; // Adjust the path based on your project structure
+      const csvFilePath = '/Data.csv';
       const response = await axios.get(csvFilePath);
 
       // Parse CSV data
       const csvData = Papa.parse(response.data, { header: true });
       console.log(csvData);
       const userData = csvData.data.find((user) => user.email === email);
+      console.log(userData);
 
       if (!userData) {
         alert('User not found.');
@@ -60,6 +57,7 @@ function Login(props) {
       }
 
       const role = userData.role;
+      console.log('User Role:', role);
 
       // Redirect based on role
       switch (role) {

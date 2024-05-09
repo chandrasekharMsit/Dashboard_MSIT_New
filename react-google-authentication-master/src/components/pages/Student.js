@@ -10,6 +10,9 @@ export default function StudentDashboard(props) {
   return (
     <div>
       <h1>Student Dashboard</h1>
+      <div>
+      <Logout />
+      </div>
       <CoursePercentage
         score={props.score}
         ss_score={props.ss_score}
@@ -38,7 +41,7 @@ export default function StudentDashboard(props) {
         lastUpdated={props.lastUpdated}
         res={props.res}
       />
-     <ScoreDisplay
+    <ScoreDisplay
         res={props.res}
         lastUpdated={props.lastUpdated}
         learningCenter={props.learningCenter}

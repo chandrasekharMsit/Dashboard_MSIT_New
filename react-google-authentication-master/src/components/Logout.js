@@ -1,16 +1,15 @@
 import React from "react";
 import { GoogleLogout } from "react-google-login";
+import { useHistory } from 'react-router-dom';
 
 const clientId =
   "707788443358-u05p46nssla3l8tmn58tpo9r5sommgks.apps.googleusercontent.com";
 
 function Logout(props) {
+  const history = useHistory();
+
   const onSuccess = () => {
     console.log("Logout made successfully");
-    // alert("Logout made successfully.");
-    props.updateLogin(false);
-    props.updateMentorFlag(false);
-    props.updateStudentEmailList([]);
   };
 
   return (

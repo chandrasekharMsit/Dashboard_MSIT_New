@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
 import { Jumbotron } from 'react-bootstrap';
-
+import Logout from "../Logout";
 
 export default function AdminDashboard() {
   const [email, setEmail] = useState("");
@@ -87,6 +87,10 @@ export default function AdminDashboard() {
       </div>
       {successMessage && <p className="text-success">{successMessage}</p>}
       {errorMessage && <p className="text-danger">{errorMessage}</p>}
+      
+    <div>
+    <Logout />
+    </div>
     </div>
   );
 }

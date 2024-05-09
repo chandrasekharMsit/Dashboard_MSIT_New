@@ -1,18 +1,17 @@
-import React from "react";
-import { Tabs, Tab } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { Tab, Tabs } from "react-bootstrap";
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import "./App.css";
-import  { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Logout from "./components/Logout";
-import Display from "./components/ScoreDisplay";
 import DisplayGrades from "./components/GradesDisplay";
-import MentorDashboard from "./components/MentorDashboard";
-import PerformanceDisplay from "./components/NEW_PerformanceDisplay";
 import LandingPage from "./components/LandingPage";
+import Logout from "./components/Logout";
+import PerformanceDisplay from "./components/NEW_PerformanceDisplay";
 import PresentationDisplay from "./components/PresentationDisplay";
+import Display from "./components/ScoreDisplay";
+import MentorDashboard from "./components/pages/mentor";
 // import MentorDashboard from './components/MentorDashboard';
-import StudentDashboard from './components/pages/StudentDashboard';
 import AdminDashboard from './components/pages/AdminDashboard';
+import StudentDashboard from './components/pages/Student';
 // import msitLogo from "..public/msit_new_logo.png";
 
 export default function App() {
@@ -68,7 +67,7 @@ export default function App() {
                   activeKey={activeKey}
                   onSelect={(key) => setActiveKey(key)}
                 >
-                 <Tab eventKey="performance" title="Performance">
+                <Tab eventKey="performance" title="Performance">
                 {data && data.dashboard_data && data.dashboard_data.learning_center ? (
                   <PerformanceDisplay
                     mentor={mentorFlag}
@@ -139,8 +138,9 @@ export default function App() {
         </Switch>
         {dropoutFlag && <h5>Student has dropped out.</h5>}
       </div>
-      <Logout/>
+      
     </Router>
+    
   );
 }
 
