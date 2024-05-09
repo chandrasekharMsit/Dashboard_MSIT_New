@@ -333,3 +333,6 @@ def get_scores(student_email):
     if json_str:
         return json_str
     return jsonify({'message': "Email Not found"})
+
+if __name__ == '__main__' :
+    app.run(debug=True)
