@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
+import Main from "./Main"
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 
@@ -9,7 +10,8 @@ import './App.css';
 
 ReactDOM.render(
 	<BrowserRouter >
-    <App />
+    {/* <App /> */}
+    <Main />
   </BrowserRouter>,
   document.getElementById("root")
 );
