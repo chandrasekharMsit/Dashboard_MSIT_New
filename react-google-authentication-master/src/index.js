@@ -1,17 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-// import App from "./App";
+import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 
 import './App.css';
-// import Logout from "./components/Logout";
-import FetchData from "./FetchData"
+import Logout from "./components/Logout";
+
 ReactDOM.render(
 	<BrowserRouter >
-    {/* <App /> */}
-    <FetchData />
+    <App />
   </BrowserRouter>,
   document.getElementById("root")
 );

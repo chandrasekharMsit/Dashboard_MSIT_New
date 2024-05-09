@@ -21,7 +21,7 @@ function Login(props) {
         `https://7seqbvouv4.execute-api.ap-south-1.amazonaws.com/default/StudentZoomData_MentorDashboard/?mentor_email=${res.profileObj.email}&operation=mentor_check`
       )
       .then((response) => {
-        props.updateMentorFlag(response.data.mentor); 
+        props.updateMentorFlag(response.data.mentor);
         props.updateStudentEmailList(response.data.student_email_list);
       });
 
