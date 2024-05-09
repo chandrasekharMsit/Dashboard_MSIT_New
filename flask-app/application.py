@@ -324,6 +324,7 @@ def get_presentation_scores():
 @app.route("/get_scores/<string:student_email>")
 def get_scores(student_email):
     values = get_data_from_excel('scores')
+    print(values)
     headers = values[0]
     json_str = None
     for row in values[1:]:
