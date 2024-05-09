@@ -314,3 +314,6 @@ def get_presentation_scores():
         ppt_scores[row_data[1].lower()] = row_data_json
     
     return ppt_scores
+
+if __name__ == '__main__' :
+    app.run(debug=True)
