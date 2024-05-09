@@ -1,12 +1,11 @@
 import React from "react";
-import axios from "axios";
-import SearchBar from "./SearchBar";
-import Display from "./ScoreDisplay";
-import DisplayGrades from "./GradesDisplay";
-import { Jumbotron, Tabs, Tab } from "react-bootstrap";
-import PerformanceDisplay from "./NEW_PerformanceDisplay";
-import PresentationDisplay from "./PresentationDisplay";
-import Logout from "./Logout";
+import { Jumbotron, Tab, Tabs } from "react-bootstrap";
+import DisplayGrades from "../GradesDisplay";
+import Logout from "../Logout";
+import PerformanceDisplay from "../NEW_PerformanceDisplay";
+import PresentationDisplay from "../PresentationDisplay";
+import Display from "../ScoreDisplay";
+import SearchBar from "../SearchBar";
 
 export default function MentorDashboard(props) {
   //hooks to store th values
@@ -148,7 +147,11 @@ export default function MentorDashboard(props) {
           </h5>
         </div>
       )}
+      <div>
+      <Logout/>
+
+
+      </div>
     </div>
-    
   );
 }
