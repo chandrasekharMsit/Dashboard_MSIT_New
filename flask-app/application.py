@@ -8,8 +8,9 @@ import pandas as pd
 from collections import OrderedDict 
 from collections import defaultdict
 import datetime
+import os
 
-from utils import get_data_from_excel
+from utils import  create_spreadsheets_service, write_users_to_excel
 
 
 app = Flask(__name__)
@@ -323,11 +324,18 @@ def get_presentation_scores():
 
 @app.route("/get_scores/<string:student_email>")
 def get_scores(student_email):
-    values = get_data_from_excel('scores')
+    print(get_scores)
+    spreadsheets_service = create_spreadsheets_service(
+        'sheets', ['https://www.googleapis.com/auth/spreadsheets'])
+    result_input = spreadsheets_service.values().get(spreadsheetId=os.environ.get('SPREADSHEET_ID'),
+                                                     range='A1:AA1000').execute()
+    values = result_input.get('values', [])
+    if not values:
+        return jsonify({'message': "No data found"})
     headers = values[0]
     json_str = None
     for row in values[1:]:
-        if row[1] == student_email:
+        if row[0] == student_email:
             row_dict = dict(zip(headers, row))
             json_str = json.dumps(row_dict, indent=4)
     if json_str:
@@ -337,7 +345,15 @@ def get_scores(student_email):
 
 @app.route("/get_role/<string:email>")
 def get_role(email):
-    values = get_data_from_excel('role')
+    spreadsheets_service = create_spreadsheets_service(
+        'sheets', ['https://www.googleapis.com/auth/spreadsheets'])
+    result_input = spreadsheets_service.values().get(spreadsheetId=os.environ.get('SPREADSHEET_ID_ROLES'),
+                                                     range='A1:AA1000').execute()
+    values = result_input.get('values', [])
+
+    if not values:
+        return jsonify({'message': "No data found"})
+
     headers = values[0]
     json_str = None
     for row in values[1:]:
@@ -347,6 +363,79 @@ def get_role(email):
     if json_str:
         return json_str
     return jsonify({'message': "Email Not found"})
+
+def get_existing_emails_from_sheet():
+    # Assuming you have already defined create_spreadsheets_service function
+    spreadsheets_service = create_spreadsheets_service('sheets', ['https://www.googleapis.com/auth/spreadsheets'])
+    result_input = spreadsheets_service.values().get(spreadsheetId=os.environ.get('SPREADSHEET_ID_ROLES'),
+                                                     range='A1:A').execute()
+    values = result_input.get('values', [])
+    existing_emails = [value[0] for value in values] if values else []
+    return existing_emails
+
+@app.route('/add_json', methods=['POST'])
+def add_json():
+    data = request.json
+
+    if not data:
+        return jsonify({"error": "No data provided."}), 400
+
+    email = data.get('email')
+    if not email:
+        return jsonify({"error": "Email not provided."}), 400
+
+    existing_emails = get_existing_emails_from_sheet()
+    if email in existing_emails:
+        return jsonify({"message": "User already exists."})
+
+    # If email doesn't exist, add user to Google Sheet
+    user_list = [[data.get(key, '') for key in data]]
+    try:
+        write_users_to_excel(user_list)
+        return jsonify({"message": "User added successfully."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+def parse_csv(csv_file):
+    user_list = []
+    # Assuming the email column is the first column (index 0) in the CSV file
+    for line in csv_file.split('\n')[1:]:  # Skip header row
+        if line.strip():
+            columns = line.split(',')  # Assuming comma-separated values
+            user_list.append(columns)
+    return user_list
+ 
+@app.route('/add_csv', methods=['POST'])
+def add_csv():
+    # Check if a file is included in the request
+    if 'file' not in request.files:
+        return jsonify({"error": "No file provided."}), 400
+
+    file = request.files['file']
+
+    # Check if the file is empty
+    if file.filename == '':
+        return jsonify({"error": "Empty file provided."}), 400
+
+    # Read the contents of the file
+    csv_content = file.read().decode('utf-8')
+
+    # Parse the CSV file to extract user data
+    user_list = parse_csv(csv_content)
+
+    # Retrieve existing emails from the Google Sheet
+    existing_emails = get_existing_emails_from_sheet()
+
+    # Filter out rows with emails already existing in the Google Sheet
+    new_user_list = [user for user in user_list if user[0] not in existing_emails]
+
+    # Add new users to the Google Sheet
+    try:
+        if new_user_list:
+            write_users_to_excel(new_user_list)
+        return jsonify({"message": f"{len(new_user_list)} new users added successfully."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == '__main__' :

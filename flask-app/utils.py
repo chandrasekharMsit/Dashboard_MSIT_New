@@ -29,7 +29,7 @@ def send_email(email, username):
     server.starttls()
     server.login(smtp_username, smtp_password)
 
-    from_email = "jayakrishnad2002@gmail.com"
+    from_email = "suryateja@msitprogram.net"
     to_email = email
     subject = "MSIT Dashboard"
     message = f"""
@@ -45,8 +45,8 @@ def send_email(email, username):
     server.sendmail(from_email, to_email, text)
     server.quit()
 
-def get_data_from_excel(keyword):
-    SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+def create_spreadsheets_service(api_service_name, *scopes):
+    SCOPES = [scope for scope in scopes[0]]
     
     creds = None
     if os.path.exists('token.pickle'):
@@ -62,18 +62,18 @@ def get_data_from_excel(keyword):
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
-    service = build('sheets', 'v4', credentials=creds)
+    service = build(api_service_name, 'v4', credentials=creds)
+    return service.spreadsheets()
 
-    sheet = service.spreadsheets()
-    if keyword == 'scores':
-        result_input = sheet.values().get(spreadsheetId=os.environ.get('SPREADSHEET_ID'),
-                                    range='A1:AA1000').execute()
-    elif keyword == 'role':
-        result_input = sheet.values().get(spreadsheetId=os.environ.get('SPREADSHEET_ID_ROLES'),
-                                    range='A1:AA1000').execute()
-    values_input = result_input.get('values', [])
-
-    if not values_input:
-        print('No data found.')
-        return
-    return values_input
+def write_users_to_excel(user_list):
+    spreadsheets_service = create_spreadsheets_service(
+        'sheets', ['https://www.googleapis.com/auth/spreadsheets'])
+    spreadsheets_service.values().append(
+        spreadsheetId=os.environ.get('SPREADSHEET_ID_ROLES'),
+        range='A1:F',  # Assuming your data starts from column A and you want to append to the end of the sheet
+        valueInputOption='RAW',
+        insertDataOption='INSERT_ROWS',
+        body=dict(
+            majorDimension='ROWS',
+            values=user_list)
+    ).execute()
