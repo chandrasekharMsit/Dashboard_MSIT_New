@@ -1,11 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
 function StudentScores() {
   const [studentData, setStudentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,7 +25,6 @@ function StudentScores() {
     };
     fetchData();
   }, []);
-
   const tableStyle = {
     width: '100%',
     borderCollapse: 'collapse',
@@ -35,22 +32,18 @@ function StudentScores() {
     fontSize: '18px',
     textAlign: 'left',
   };
-
   const thStyle = {
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#F2F2F2',
     padding: '12px',
     border: '1px solid #ddd',
   };
-
   const cellStyle = {
     padding: '12px',
     border: '1px solid #ddd',
   };
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!studentData || studentData.length === 0) return <div>No data available</div>;
-
   return (
     <div style={{ padding: '20px' }}>
       <h1 style={{ textAlign: 'center' }}>Student Scores</h1>
@@ -89,12 +82,4 @@ function StudentScores() {
     </div>
   );
 }
-
 export default StudentScores;
-
-
-
-
-
-
-
