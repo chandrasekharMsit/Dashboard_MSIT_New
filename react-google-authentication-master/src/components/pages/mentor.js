@@ -5,6 +5,9 @@ import PerformanceDisplay from "../NEW_PerformanceDisplay";
 import PresentationDisplay from "../PresentationDisplay";
 import Display from "../ScoreDisplay";
 import SearchBar from "../SearchBar";
+import { BrowserRouter } from "react-router-dom";
+import FetchData from "../../FetchData"
+import Logout from "../Logout";
 export default function MentorDashboard(props) {
   //hooks to store th values
   const [displayFlag, setDisplayFlag] = React.useState(false);
@@ -135,12 +138,17 @@ export default function MentorDashboard(props) {
         </div>
       ) : (
         <div>
-          <br />
+          {/* <br />
           <h5 style={{ fontFamily: "Avenir" }}>
             Please enter the student's email and hit search
-          </h5>
+          </h5> */}
+          <BrowserRouter >
+          <FetchData />
+          </BrowserRouter>
+          
         </div>
       )}
+      <Logout/>
     </div>
   );
 }
