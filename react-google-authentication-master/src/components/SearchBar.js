@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import {
   Button,
   Overlay,
@@ -261,6 +262,8 @@ export default function SearchBar(props) {
                     props.updateSSScore(response.data.course_attendance.SS);
                   }
                 });
+                
+                
 
               // const urlValue = `https://lzeh91brdj.execute-api.ap-south-1.amazonaws.com/Deveploment/?email=${searchEmail}`;
               // axios
@@ -287,6 +290,9 @@ export default function SearchBar(props) {
           {recent_searches_data}
         </Card.Body>
       </Card>
+      <Link to="/studentScore">
+        <Button style={{width:"100px",padding:"2px",position:"absolute",right:"10px",top:"8px"}}>Show scores</Button>
+        </Link>
     </div>
   );
 }
