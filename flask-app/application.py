@@ -373,25 +373,6 @@ def single_student_score(student_email):
         return data_json
 
 
-@app.route('/students-scores')
-def students_scores():
-    worksheet = get_worksheet('scores_sheet_url')
-    values = worksheet.get_all_values()
-    data_json = []
-    headers = values[0]
-
-    for sublist in values[1:]:
-        json_object = {}
-        for i, key in enumerate(headers):
-            json_object[key] = sublist[i]
-        data_json.append(json_object)
-
-    if data_json == []:
-        return jsonify({'message': "Data Not found"})
-    else:
-        return data_json
-    
-
 @app.route('/subject-scores/<string:sheet_name>')
 def subject_scores(sheet_name):
     
