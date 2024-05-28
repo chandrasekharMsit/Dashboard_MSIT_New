@@ -10,7 +10,7 @@ function SingleStudentScores() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:5000/single-student-score/sreedivya@msitprogram.net",
+          "http://127.0.0.1:5000/single-student-score/${selectedSheet}",
           {
             headers: {
               "Access-Control-Allow-Origin": "*", // Add your desired headers here

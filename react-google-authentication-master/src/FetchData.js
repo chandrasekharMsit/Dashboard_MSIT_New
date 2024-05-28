@@ -1,85 +1,127 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-function StudentScores() {
-  const [studentData, setStudentData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://127.0.0.1:5000/students-scores",
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*", // Add your desired headers here
-            },
-          }
-        );
-        setStudentData(response.data); // Assuming the backend response is an array of objects
-        console.log(response.data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
+import React, { useState } from 'react';
+
+function UploadMarksheet() {
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [success, setSuccess] = useState(false);
+
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
     };
-    fetchData();
-  }, []);
-  const tableStyle = {
-    width: '100%',
-    borderCollapse: 'collapse',
-    margin: '20px 0',
-    fontSize: '18px',
-    textAlign: 'left',
-  };
-  const thStyle = {
-    backgroundColor: '#F2F2F2',
-    padding: '12px',
-    border: '1px solid #ddd',
-  };
-  const cellStyle = {
-    padding: '12px',
-    border: '1px solid #ddd',
-  };
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!studentData || studentData.length === 0) return <div>No data available</div>;
-  return (
-    <div style={{ padding: '20px' }}>
-      <h1 style={{ textAlign: 'center' }}>Student Scores</h1>
-      <table style={tableStyle}>
-        <thead>
-          <tr>
-            <th style={thStyle}>Name</th>
-            <th style={thStyle}>Email ID</th>
-            <th style={thStyle}>Discussions (10%)</th>
-            <th style={thStyle}>Quiz (10%)</th>
-            <th style={thStyle}>Assignment (20%)</th>
-            <th style={thStyle}>Weekly (30%)</th>
-            <th style={thStyle}>Total (70%)</th>
-            <th style={thStyle}>End Sem (30%)</th>
-            <th style={thStyle}>Total (100)</th>
-            <th style={thStyle}>Grade</th>
-          </tr>
-        </thead>
-        <tbody>
-          {studentData.map((item, index) => (
-            <tr key={index}>
-              <td style={cellStyle}>{item["Name"]}</td>
-              <td style={cellStyle}>{item["Email ID"]}</td>
-              <td style={cellStyle}>{item["Discussions (10%)"]}</td>
-              <td style={cellStyle}>{item["Quiz (10%)"]}</td>
-              <td style={cellStyle}>{item["Assignment (20%)"]}</td>
-              <td style={cellStyle}>{item["Weekly (30%)"]}</td>
-              <td style={cellStyle}>{item["Total (70%)"]}</td>
-              <td style={cellStyle}>{item["End Sem (30%)"]}</td>
-              <td style={cellStyle}>{item["Total (100)"]}</td>
-              <td style={cellStyle}>{item["Grade "]}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (!selectedFile) {
+            alert('Please select a file to upload.');
+            return;
+        }
+
+        // Check file extension
+        const fileName = selectedFile.name;
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+        if (fileExtension !== 'xls' && fileExtension !== 'xlsx') {
+            alert('Please select a file with .xls or .xlsx extension.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/upload-marksheet/', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            setSuccess(true);
+            alert('File uploaded successfully!');
+            
+            // Store uploaded file name in local storage without extension
+            const uploadedFiles = JSON.parse(localStorage.getItem('uploadedFiles')) || [];
+            uploadedFiles.push(fileName.split('.').slice(0, -1).join('.'));
+            localStorage.setItem('uploadedFiles', JSON.stringify(uploadedFiles));
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000); // Refresh after 2 seconds
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            alert('Failed to upload file. Please try again.');
+        }
+    };
+
+    return (
+        <div className="upload-container">
+            <h1>Upload Marksheet</h1>
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="fileInput" className="custom-file-upload">
+                    <input type="file" id="fileInput" onChange={handleFileChange} accept=".pdf,.doc,.docx,.xls,.xlsx" />
+                    Select File
+                </label>
+                <button type="submit">Upload</button>
+            </form>
+            {success && <p className="success-message">File uploaded successfully!</p>}
+            <style>
+                {`
+                    .upload-container {
+                        text-align: center;
+                    }
+
+                    .custom-file-upload {
+                        display: inline-block;
+                        background-color: #3498db;
+                        color: #fff;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease;
+                    }
+
+                    .custom-file-upload:hover {
+                        background-color: #2980b9;
+                    }
+
+                    .custom-file-upload input[type="file"] {
+                        display: none;
+                    }
+
+                    button {
+                        margin-top: 10px;
+                        background-color: #2ecc71;
+                        color: #fff;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease;
+                    }
+
+                    button:hover {
+                        background-color: #27ae60;
+                    }
+
+                    .success-message {
+                        margin-top: 20px;
+                        color: #2ecc71;
+                        font-weight: bold;
+                        animation: fadein 1s;
+                    }
+
+                    @keyframes fadein {
+                        from {
+                            opacity: 0;
+                        }
+                        to {
+                            opacity: 1;
+                        }
+                    }
+                `}
+            </style>
+        </div>
+    );
 }
-export default StudentScores;
+
+export default UploadMarksheet;

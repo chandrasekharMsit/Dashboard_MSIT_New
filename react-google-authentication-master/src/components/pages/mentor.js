@@ -8,6 +8,7 @@ import SearchBar from "../SearchBar";
 import { BrowserRouter } from "react-router-dom";
 import FetchData from "../../FetchData"
 import Logout from "../Logout";
+import Subject from "../../Subject"
 export default function MentorDashboard(props) {
   //hooks to store th values
   const [displayFlag, setDisplayFlag] = React.useState(false);
@@ -144,6 +145,7 @@ export default function MentorDashboard(props) {
           </h5> */}
           <BrowserRouter >
           <FetchData />
+          <Subject />
           </BrowserRouter>
           
         </div>

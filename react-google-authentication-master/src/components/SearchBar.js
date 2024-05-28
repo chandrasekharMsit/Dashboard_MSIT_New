@@ -290,9 +290,9 @@ export default function SearchBar(props) {
           {recent_searches_data}
         </Card.Body>
       </Card>
-      <Link to="/studentScore">
+      {/* <Link to="/studentScore">
         <Button style={{width:"100px",padding:"2px",position:"absolute",right:"10px",top:"8px"}}>Show scores</Button>
-        </Link>
+        </Link> */}
     </div>
   );
 }
