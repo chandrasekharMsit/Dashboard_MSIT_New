@@ -88,7 +88,7 @@ def validate_data(data, worksheet):
     unadded_users = []
 
     if isinstance(data, dict):
-        if all(key in data for key in ('name', 'email', 'id_number', 'phone_number', 'role')) and (data.get('role') != 'student' or data.get('batch').strip()):
+        if all(key in data for key in ('name', 'email', 'id_number', 'phone_number', 'role')) and (data.get('role') != 'student' or ("batch" in data and data.get('batch').strip())):
             email = data.get('email')
             if email and email.lower() not in existing_emails and validate_fields(data.get("name"), data.get("id_number"), data.get("phone_number"), email):
                 added_users.append(list(data.values()))
@@ -100,8 +100,8 @@ def validate_data(data, worksheet):
     elif isinstance(data, list):
         for entry in data:
             email = entry.get('email')
-            if all(key in entry for key in ('name', 'email', 'id_number', 'phone_number', 'role')) and (entry.get('role') != 'student' or entry.get('batch').strip()):
-                if email and email.lower() not in existing_emails and validate_fields(data.get("name"), data.get("id_number"), data.get("phone_number"), email):
+            if all(key in entry for key in ('name', 'email', 'id_number', 'phone_number', 'role')) and (entry.get('role') != 'student' or ("batch" in data and entry.get('batch').strip())):
+                if email and email.lower() not in existing_emails and validate_fields(entry.get("name"), entry.get("id_number"), entry.get("phone_number"), email):
                     added_users.append(list(entry.values()))
                 else:
                     unadded_users.append(list(entry.values()))
