@@ -296,13 +296,39 @@ export default function AdminDashboard(props) {
                       value={countryCode}
                       onChange={(e) => setCountryCode(e.target.value)}
                     >
-                      <option value="91">+91</option>
+                      <option value="91">+91 (India)</option>
+                      <option value="1">+1 (United States)</option>
+  <option value="44">+44 (United Kingdom)</option>
+  <option value="91">+91 (India)</option>
+  <option value="61">+61 (Australia)</option>
+  <option value="81">+81 (Japan)</option>
+  <option value="49">+49 (Germany)</option>
+  <option value="33">+33 (France)</option>
+  <option value="55">+55 (Brazil)</option>
+  <option value="86">+86 (China)</option>
+  <option value="7">+7 (Russia)</option>
+  <option value="39">+39 (Italy)</option>
+  <option value="34">+34 (Spain)</option>
+  <option value="47">+47 (Norway)</option>
+  <option value="46">+46 (Sweden)</option>
+  <option value="31">+31 (Netherlands)</option>
+  <option value="32">+32 (Belgium)</option>
+  <option value="52">+52 (Mexico)</option>
+  <option value="27">+27 (South Africa)</option>
+  <option value="82">+82 (South Korea)</option>
+  <option value="64">+64 (New Zealand)</option>
+  <option value="20">+20 (Egypt)</option>
+  <option value="234">+234 (Nigeria)</option>
+  <option value="92">+92 (Pakistan)</option>
+  <option value="90">+90 (Turkey)</option>
+  <option value="45">+45 (Denmark)</option>
                       {/* Add more country codes as needed */}
                     </Form.Control>
                     <Form.Control
                       type="text"
                       placeholder="Enter phone number"
                       value={phoneNumber}
+                      maxLength="10"
                       onChange={(e) => handlePhoneNumberChange(e.target.value)}
                       onBlur={(e) => validatePhoneNumber(e.target.value)}
                     />
