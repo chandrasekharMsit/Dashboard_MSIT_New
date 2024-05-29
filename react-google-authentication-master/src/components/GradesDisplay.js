@@ -130,6 +130,7 @@ function GradesCard(props) {
             </Col>
           </Row>
         </Container>
+        <Logout/>
       </React.Fragment>
     );
   }
@@ -138,6 +139,7 @@ function GradesCard(props) {
 
 export default function DisplayGrades(props) {
   return (
+    
     // <div className="App" style={{ marginLeft: 15, marginRight: 15 }}>
     <React.Fragment>
       {/* <h1>Oye@!!</h1> */}
@@ -188,6 +190,7 @@ export default function DisplayGrades(props) {
         </div>
       </React.Fragment>
     </React.Fragment>
+   
     // </div>
   );
 }

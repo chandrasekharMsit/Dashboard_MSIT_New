@@ -1,95 +1,83 @@
 import axios from "axios";
-import Papa from 'papaparse';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GoogleLogin } from "react-google-login";
-import { useHistory } from 'react-router-dom';
-// refresh token
-import { refreshTokenSetup } from "../utils/refreshToken";
-const clientId =
-  "517972967421-7vd20rig40hriq0rlapi67al4q717n05.apps.googleusercontent.com";
+import { withRouter } from "react-router-dom";
+
+const clientId = "517972967421-7vd20rig40hriq0rlapi67al4q717n05.apps.googleusercontent.com";
+
 function Login(props) {
-  const history = useHistory();
-  const onSuccess = async (res) => {
-    // alert(`Logged in successfully welcome ${res.profileObj.name}`);
-    console.log("Login successful");
-    axios
-      .get(
-        `https://7seqbvouv4.execute-api.ap-south-1.amazonaws.com/default/StudentZoomData_MentorDashboard/?mentor_email=${res.profileObj.email}&operation=mentor_check`
-      )
-      .then((response) => {
-        props.updateMentorFlag(response.data.mentor);
-        props.updateStudentEmailList(response.data.student_email_list);
-      });
-    let email = res.profileObj.email;
-    if (props.mentor) email = props.studentEmail;
-    axios
-      .get(
-        `https://7seqbvouv4.execute-api.ap-south-1.amazonaws.com/StudentZoom/StudentZoomData_CoursePerformance/?email=${email}`
-      )
-      .then((response) => {
-        if (response.data === "Student dropped out") {
-          props.updateDropoutFlag(true);
-        } else {
-          props.updateData(response.data);
-          props.updateScore(response.data.course_attendance.IT);
-          props.updateSSScore(response.data.course_attendance.SS);
-        }
-      });
-      const csvFilePath = '/Data.csv';
-      const response = await axios.get(csvFilePath);
-      // Parse CSV data
-      const csvData = Papa.parse(response.data, { header: true });
-      console.log(csvData);
-      const userData = csvData.data.find((user) => user.email === email);
-      console.log(userData);
-      if (!userData) {
-        alert('User not found.');
-        return;
-      }
-      const role = userData.role;
-      console.log('User Role:', role);
-      // Redirect based on role
-      switch (role) {
-        case 'student':
-          history.push('/student-dashboard');
-          break;
-        case 'mentor':
-          history.push('/mentor-dashboard');
-          break;
-        case 'admin':
-          history.push('/admin-dashboard');
-          break;
-        default:
-          alert('Role not found or invalid.');
-          break;
-      }
-    props.updateLogin(true);
-    props.updateEmail(res.profileObj.email);
-    refreshTokenSetup(res);
+  const [redirected, setRedirected] = useState(false);
+
+  const fetchUserRole = async (email) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:5000/get-role/${email}`);
+      const role = response.data.role;
+      return role;
+    } catch (error) {
+      console.error("Failed to fetch user role:", error);
+      throw error;
+    }
   };
+
+  const onSuccess = async (res) => {
+    const userEmail = res.profileObj.email;
+    try {
+      const role = await fetchUserRole(userEmail);
+      localStorage.setItem("userEmail", userEmail);
+      localStorage.setItem("userRole", role);
+      setRedirected(true);
+    } catch (error) {
+      alert(`Failed to fetch user role.`);
+    }
+  };
+
   const onFailure = (res) => {
     console.log("Login failed: res:", res);
-    alert('Failed to login.');
+    alert(`Failed to login.`);
   };
+
+  useEffect(() => {
+    if (redirected) {
+      redirectToRolePage();
+    }
+  }, [redirected]);
+
+  const redirectToRolePage = () => {
+    const userRole = localStorage.getItem("userRole");
+    switch (userRole) {
+      case "admin":
+        props.history.push("/admin-dashboard");
+        break;
+      case "mentor":
+        props.history.push("/mentor-dashboard");
+        break;
+        case "student":
+          props.history.push("/student-dashboard");
+          break;
+      
+      default:
+        alert("User role not found or not specified.");
+        break;
+    }
+  };
+
   return (
     <div>
-      <GoogleLogin
-        clientId={clientId}
-        buttonText="Login"
-        onSuccess={onSuccess}
-        onFailure={onFailure}
-        cookiePolicy={"single_host_origin"}
-        style={{ marginTop: "0px" }}
-        // isSignedIn={true}
-      />
+      {redirected ? null : (
+        <GoogleLogin
+          clientId={clientId}
+          buttonText="Login"
+          onSuccess={onSuccess}
+          onFailure={onFailure}
+          cookiePolicy={"single_host_origin"}
+          style={{ marginTop: "0px" }}
+          isSignedIn={true}
+        />
+      )}
       <br />
       <br />
     </div>
   );
 }
-export default Login;
 
-
-
-
-
+export default withRouter(Login);

@@ -1,13 +1,7 @@
 import React from "react";
-import CoursePercentage from "../CoursePercentage";
-import GradesDisplay from "../GradesDisplay";
-import NEW_CourseAccordion from "../NEW_CourseAccordion";
-import New_PerformanceDisplay from "../NEW_PerformanceDisplay";
-import PresentationDisplay from "../PresentationDisplay";
-import ScoreDisplay from "../ScoreDisplay";
-import Logout from "../Logout";
 import { BrowserRouter } from "react-router-dom/cjs/react-router-dom.min";
-import FetchDatasingles from "../../FetchDatasingls"
+import FetchDatasingles from "../../FetchDatasingls";
+import Logout from "../Logout";
 export default function StudentDashboard(props) {
   return (
     // <div>
@@ -55,6 +49,7 @@ export default function StudentDashboard(props) {
       <BrowserRouter>
       <FetchDatasingles />
       </BrowserRouter>
+      <Logout/>
     </div>
   );
 }

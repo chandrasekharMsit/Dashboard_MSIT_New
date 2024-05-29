@@ -1,6 +1,20 @@
 import React, { useState } from 'react';
 
 function UploadMarksheet() {
+    const buttonStyle = {
+        marginTop: '10px',
+        backgroundColor: '#66737c',
+        color: '#fff',
+        padding: '8px 30px',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s ease'
+      };
+      const [showFetchData, setShowFetchData] = useState(false);
+      const buttonHoverStyle = {
+        backgroundColor: '#babfc5'
+      };
     const [selectedFile, setSelectedFile] = useState(null);
     const [success, setSuccess] = useState(false);
 
@@ -55,57 +69,76 @@ function UploadMarksheet() {
 
     return (
         <div className="upload-container">
-            <h1>Upload Marksheet</h1>
+            <h1 className='heading'>Upload Marksheet</h1>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="fileInput" className="custom-file-upload">
                     <input type="file" id="fileInput" onChange={handleFileChange} accept=".pdf,.doc,.docx,.xls,.xlsx" />
-                    Select File
+                     
                 </label>
-                <button type="submit">Upload</button>
+                <button 
+                style={buttonStyle}
+                onMouseOver={(e) => (e.target.style.backgroundColor = buttonHoverStyle.backgroundColor)}
+                onMouseOut={(e) => (e.target.style.backgroundColor = buttonStyle.backgroundColor)}
+                onClick={() => setShowFetchData(false)}
+                
+                type="submit">Upload</button>
             </form>
             {success && <p className="success-message">File uploaded successfully!</p>}
             <style>
                 {`
+                .heading{
+                    text-align:center;
+                    color:#434950;
+                    marginTop:40px;
+
+                }
                     .upload-container {
                         text-align: center;
+                        padding:10px 10px;
+                        top:200px;
                     }
 
                     .custom-file-upload {
                         display: inline-block;
-                        background-color: #3498db;
+                        margin: 20px;
+                        background-color:#66737c;
+                       
+                       
+                        
                         color: #fff;
-                        padding: 10px 20px;
+                        padding: 5px 20px;
                         border-radius: 5px;
                         cursor: pointer;
                         transition: background-color 0.3s ease;
                     }
 
                     .custom-file-upload:hover {
-                        background-color: #2980b9;
+                        background-color: #c5c9ce;
+                        padding: 5px 20px;
                     }
 
                     .custom-file-upload input[type="file"] {
-                        display: none;
+                        // display: none;
                     }
 
-                    button {
-                        margin-top: 10px;
-                        background-color: #2ecc71;
-                        color: #fff;
-                        padding: 10px 20px;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                        transition: background-color 0.3s ease;
-                    }
+                    // button {
+                    //     margin-top: 10px;
+                    //     background-color: #2ecc71;
+                    //     color: #fff;
+                    //     padding: 10px 20px;
+                    //     border: none;
+                    //     border-radius: 5px;
+                    //     cursor: pointer;
+                    //     transition: background-color 0.3s ease;
+                    // }
 
-                    button:hover {
-                        background-color: #27ae60;
-                    }
+                    // button:hover {
+                    //     background-color: #babfc5;
+                    // }
 
                     .success-message {
                         margin-top: 20px;
-                        color: #2ecc71;
+                        color: black;
                         font-weight: bold;
                         animation: fadein 1s;
                     }

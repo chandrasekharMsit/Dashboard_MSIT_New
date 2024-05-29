@@ -1,7 +1,7 @@
 import React from "react";
-import { Jumbotron, Row, Col, Navbar } from "react-bootstrap";
+import { Col, Jumbotron } from "react-bootstrap";
 import Login from "./Login";
-
+import LoginPrev from "./LoginPrev.js";
 export default function LandingPage(props) {
   return (
     <div>
@@ -30,19 +30,30 @@ export default function LandingPage(props) {
         {/* <Col>MSIT Dashboard</Col> */}
         <Col>
           <h5>Use your MSIT account to login.</h5>
-          <a href="/">
-            <Login
-              updateLogin={props.updateLogin}
-              updateEmail={props.updateEmail}
-              updateMentorFlag={props.updateMentorFlag}
-              updateStudentEmailList={props.updateStudentEmailList}
-              updateData={props.updateData}
-              updateScore={props.updateScore}
-              updateSSScore={props.updateSSScore}
-              updateDropoutFlag={props.updateDropoutFlag}
-            />
-          </a>
+          <Login
+            updateLogin={props.updateLogin}
+            updateEmail={props.updateEmail}
+            updateMentorFlag={props.updateMentorFlag}
+            updateStudentEmailList={props.updateStudentEmailList}
+            updateData={props.updateData}
+            updateScore={props.updateScore}
+            updateSSScore={props.updateSSScore}
+            updateDropoutFlag={props.updateDropoutFlag}
+          />
         </Col>
+        {/* <Col>
+          <h5>Use your MSIT account to login.</h5>
+          <LoginPrev
+            updateLogin={props.updateLogin}
+            updateEmail={props.updateEmail}
+            updateMentorFlag={props.updateMentorFlag}
+            updateStudentEmailList={props.updateStudentEmailList}
+            updateData={props.updateData}
+            updateScore={props.updateScore}
+            updateSSScore={props.updateSSScore}
+            updateDropoutFlag={props.updateDropoutFlag}
+          />
+        </Col> */}
       </Jumbotron>
     </div>
   );
