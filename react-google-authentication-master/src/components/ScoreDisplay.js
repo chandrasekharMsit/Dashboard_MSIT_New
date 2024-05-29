@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import { Table, Row, Col, Container, Jumbotron } from "react-bootstrap";
 import CoursePercentage from "./CoursePercentage";
-
 function Display_table(props) {
   if (props.info.dashboard_data === "File Does not exist") {
     return <div>Attendance record not found</div>;
